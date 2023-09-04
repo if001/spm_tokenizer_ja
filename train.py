@@ -17,7 +17,9 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
     for i in range(0, len(dataset), batch_size):
         batched_data = []
         print('c: ', len(dataset), i, i+batch_size)
-        print('a: ' ,dataset.select(range(0, 10)))
+        print('a: ' ,dataset.select(range(0, 2)))
+        for v in dataset.select(range(0, 2)):
+            print(v)
         print('a1: ' ,dataset.select(range(0, 100)))
         print('a2: ' ,dataset.select(range(0, 500)))        
         print('a3: ' ,dataset.select(range(0, 800)))

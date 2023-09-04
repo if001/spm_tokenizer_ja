@@ -17,8 +17,7 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
     for i in range(0, len(dataset), batch_size):
         batched_data = []
         for idx in range(i, i+batch_size):
-            print('v: ', dataset.select([idx])['text'])
-            batched_data.append(dataset.select([idx])['text'])            
+            batched_data.append(dataset.select([idx])['text'][0])
         tokenizer.train_from_iterator(batched_data, trainer=trainer, length=len(dataset))    
     return tokenizer
 

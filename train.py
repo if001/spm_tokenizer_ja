@@ -19,7 +19,8 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
         print('1: ', dataset.select(range(i, i+batch_size)))
         d = dataset.select(range(i, i+batch_size))
         print('2: ', d)
-        print('3: ', d[0])
+        print('3: ', d.select([0]))
+        print('4: ', d.select([0])['text'])
         
         for v in dataset.select(range(i, i+batch_size)):
             batched_data.append(v['text'])

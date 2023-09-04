@@ -62,7 +62,7 @@ def main():
         dataset = dataset['train']
         print(dataset)
         base = range(len(dataset))    
-        window = int(base/4)
+        window = int(len(dataset)/4)
         for i, idxs in enumerate(split_array(base, window)):
             part = dataset.select(idxs)
             tokenizer = train_as_dataset(tokenizer, trainer, part , 1000)

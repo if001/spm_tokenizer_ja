@@ -23,6 +23,7 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
         print('a3: ' ,dataset.select(range(0, 800)))
         print('a4: ' ,dataset.select(range(0, 1000)))
         print('a5: ' ,dataset.select(range(i, i+batch_size)))
+        print('a6: ' ,dataset.select(range(i, i+batch_size))[0])
         for v in dataset.select(range(i, i+batch_size)):
             batched_data.append(v['text'])
         tokenizer.train_from_iterator(batched_data, trainer=trainer, length=len(dataset))    

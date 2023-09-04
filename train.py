@@ -17,7 +17,9 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
     for i in range(0, len(dataset), batch_size):
         batched_data = []
         print('1: ', dataset.select(range(i, i+batch_size)))
-        print('2: ', dataset.select(range(i, i+batch_size))[0])
+        d = dataset.select(range(i, i+batch_size))
+        print('2: ', d)
+        print('3: ', d[0])
         
         for v in dataset.select(range(i, i+batch_size)):
             batched_data.append(v['text'])
@@ -72,13 +74,13 @@ def main():
     
     for dataset_id in args.datasets: 
         dataset = datasets.load_dataset(dataset_id)
-        dataset = dataset['train']
-        print(dataset)
+        ds = dataset['train']
+        print('raw dataset: ', ds)
        
         if 'wiki' in dataset_id:
-            tokenizer = train_with_split(tokenizer, trainer, dataset, batch_size=20000, split_count=100)
+            tokenizer = train_with_split(tokenizer, trainer, ds, batch_size=20000, split_count=100)
         else:            
-            tokenizer = train_as_dataset(tokenizer, trainer, dataset, batch_size=1000)
+            tokenizer = train_as_dataset(tokenizer, trainer, ds, batch_size=1000)
         save_file = f"./tmp_{dataset_id}.json"
         tokenizer.save(save_file)
         print(f'save... {save_file}')

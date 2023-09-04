@@ -22,6 +22,8 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
     return tokenizer
 
     
+def split_array(arr, M):
+    return [arr[i:i+M] for i in range(0, len(arr), M)]
 
 def main():
     parser = argparse.ArgumentParser()
@@ -54,14 +56,17 @@ def main():
         unk_token="<UNK>"
     )
 
+    
     for dataset_id in args.datasets: 
         dataset = datasets.load_dataset(dataset_id)
-        # dataset = dataset['train']
-        dataset = dataset['train'].train_test_split(test_size=0.5)
-        tokenizer = train_as_dataset(tokenizer, trainer, dataset['train'], 32)
-        tokenizer.save(f"./tmp_{dataset_id}_1".json)
-        tokenizer = train_as_dataset(tokenizer, trainer, dataset['test'], 32)
-        tokenizer.save(f"./tmp_{dataset_id}_2".json)
+        dataset = dataset['train']
+        print(dataset)
+        base = range(len(dataset))    
+        window = int(base/4)
+        for i, idxs in enumerate(split_array(base, window)):
+            part = dataset.select(idxs)
+            tokenizer = train_as_dataset(tokenizer, trainer, part , 1000)
+            tokenizer.save(f"./tmp_{dataset_id}_{i}".json)    
     tokenizer.save(args.save_file)
 
 

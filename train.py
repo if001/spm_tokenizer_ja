@@ -51,7 +51,7 @@ def main():
     trainer = trainers.UnigramTrainer(
         vocab_size=args.vocab_size,
         show_progress=True,
-        initial_alphabet=pre_tokenizers.ByteLevel.alphabet(),
+        # initial_alphabet=pre_tokenizers.ByteLevel.alphabet(),
         special_tokens=["<PAD>", "<BOS>", "<EOS>", "<UNK>", "<MASK>"],
         unk_token="<UNK>"
     )
@@ -67,7 +67,10 @@ def main():
             part = dataset.select(idxs)
             print(part)
             tokenizer = train_as_dataset(tokenizer, trainer, part , 10000)
-            tokenizer.save(f"./tmp_{dataset_id}_{i}".json)    
+            save_file = f"./tmp_{dataset_id}_{i}.json"
+            tokenizer.save(save_file)
+            print(f'save... {save_file}')
+
     tokenizer.save(args.save_file)
 
 

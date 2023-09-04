@@ -20,7 +20,7 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
                 yield ds[i : len(ds)-1]["text"]
             else:
                 print('ds: ', ds)
-                print('ds2: ', ds[0])
+                print('ds2: ', ds.select([0, 1, 2]))
                 yield ds[i : i + batch_size - 1]["text"]
 
     print('len: ', len(dataset))

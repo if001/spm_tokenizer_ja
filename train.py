@@ -75,7 +75,7 @@ def main():
         if 'wiki' in dataset_id:
             tokenizer = train_with_split(tokenizer, trainer, ds, batch_size=20000, split_count=100)
         else:            
-            tokenizer = train_as_dataset(tokenizer, trainer, ds, batch_size=1000)
+            tokenizer = train_as_dataset(tokenizer, trainer, ds, batch_size=10000)
         save_file = f"./tmp_{dataset_id}.json"
         tokenizer.save(save_file)
         print(f'save... {save_file}')

@@ -57,11 +57,8 @@ def main():
     for dataset_id in args.datasets: 
         dataset = datasets.load_dataset(dataset_id)
         dataset = dataset['train']
-        half = int(len(dataset)/2)        
-        tokenizer = train_as_dataset(tokenizer, trainer, dataset[:half], 50000)
-        tokenizer.save(f"./t_{dataset_id}_0".json)
-        tokenizer = train_as_dataset(tokenizer, trainer, dataset[half:], 50000)
-        tokenizer.save(f"./t_{dataset_id}_1".json)
+        tokenizer = train_as_dataset(tokenizer, trainer, dataset, 1000)
+        tokenizer.save(f"./tmp_{dataset_id}".json)
     tokenizer.save(args.save_file)
 
 

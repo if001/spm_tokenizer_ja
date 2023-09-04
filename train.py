@@ -18,7 +18,7 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
         for i in range(0, len(dataset), batch_size):
             if i + batch_size > len(dataset):
                 print(i + batch_size > len(dataset), i + batch_size, len(dataset))
-                print(dataset[i : len(dataset)-2]["text"])
+                print(dataset)
                 yield dataset[i : len(dataset)-1]["text"]
             else:
                 yield dataset[i : i + batch_size]["text"]
@@ -79,8 +79,8 @@ def main():
        
         if 'wiki' in dataset_id:
             tokenizer = train_with_split(tokenizer, trainer, dataset, batch_size=20000, split_count=100)
-        else:
-            tokenizer = train_as_dataset(tokenizer, trainer, dataset, batch_size=20000)
+        else:            
+            tokenizer = train_as_dataset(tokenizer, trainer, dataset, batch_size=1000)
         save_file = f"./tmp_{dataset_id}.json"
         tokenizer.save(save_file)
         print(f'save... {save_file}')

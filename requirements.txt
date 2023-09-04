@@ -1,0 +1,6 @@
+sentencepiece
+huggingface
+tokenizers
+datasets
+transformers
+protobuf

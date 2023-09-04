@@ -66,7 +66,7 @@ def main():
         for i, idxs in enumerate(split_array(base, window)):                    
             part = dataset.select(idxs)
             print(part)
-            tokenizer = train_as_dataset(tokenizer, trainer, part , 1000)
+            tokenizer = train_as_dataset(tokenizer, trainer, part , 10000)
             tokenizer.save(f"./tmp_{dataset_id}_{i}".json)    
     tokenizer.save(args.save_file)
 

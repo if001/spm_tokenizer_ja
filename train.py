@@ -62,9 +62,10 @@ def main():
         dataset = dataset['train']
         print(dataset)
         base = range(len(dataset))    
-        window = int(len(dataset)/4)
-        for i, idxs in enumerate(split_array(base, window)):
+        window = int(len(dataset)/10)
+        for i, idxs in enumerate(split_array(base, window)):                    
             part = dataset.select(idxs)
+            print(part)
             tokenizer = train_as_dataset(tokenizer, trainer, part , 1000)
             tokenizer.save(f"./tmp_{dataset_id}_{i}".json)    
     tokenizer.save(args.save_file)

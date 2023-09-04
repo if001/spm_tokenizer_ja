@@ -21,6 +21,8 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
                 print("dataset::::::", dataset)                
                 yield dataset[i : len(dataset)-1]["text"]
             else:
+                print('aaa:', i, i+batch_size, len(dataset))
+                print("bbb: ", dataset[i : i + batch_size])
                 yield dataset[i : i + batch_size]["text"]
     print('len: ', len(dataset))
     tokenizer.train_from_iterator(batch_iterator(), trainer=trainer, length=len(dataset))

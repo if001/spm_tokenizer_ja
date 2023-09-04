@@ -36,11 +36,6 @@ def main():
         default="izumi-lab/wikipedia-ja-20230720,izumi-lab/wikinews-en-20230728,if001/aozorabunko-clean-sin"
     )
     parser.add_argument(
-        "--urls",
-        type=lambda s: s.split(","),
-        default=[]        
-    )
-    parser.add_argument(
         "--vocab_size",
         type=int,
         default=32000
@@ -61,6 +56,7 @@ def main():
 
     for dataset_id in args.datasets: 
         dataset = datasets.load_dataset(dataset_id)
+        dataset = dataset['train']
         tokenizer = train_as_dataset(tokenizer, trainer, dataset, 65000)
     tokenizer.save(args.save_file)
 

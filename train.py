@@ -16,17 +16,9 @@ def init_tokenizer():
 def train_as_dataset(tokenizer, trainer, dataset, batch_size):
     for i in range(0, len(dataset), batch_size):
         batched_data = []
-        print('c: ', len(dataset), i, i+batch_size)
-        print('a: ' ,dataset.select(range(0, 2)))
-        for v in dataset.select(range(0, 2)):
-            print(v)
-        print('a1: ' ,dataset.select(range(0, 100)))
-        print('a2: ' ,dataset.select(range(0, 500)))        
-        print('a3: ' ,dataset.select(range(0, 800)))
-        print('a4: ' ,dataset.select(range(0, 1000)))
-        print('a4.5: ' ,dataset.select(range(0, 1000))[0] )
-        print('a5: ' ,dataset.select(range(i, i+batch_size)))
-        print('a6: ' ,dataset.select(range(i, i+batch_size))[0] )
+        print('1: ', dataset.select(range(i, i+batch_size)))
+        print('2: ', dataset.select(range(i, i+batch_size))[0])
+        
         for v in dataset.select(range(i, i+batch_size)):
             batched_data.append(v['text'])
         tokenizer.train_from_iterator(batched_data, trainer=trainer, length=len(dataset))    
@@ -37,7 +29,7 @@ def split_array(arr, M):
     return [arr[i:i+M] for i in range(0, len(arr), M)]
 
 def train_with_split(tokenizer, trainer, dataset, batch_size, split_count=10):
-    base = range(len(dataset))    
+    base = range(len(dataset))
     window = int(len(dataset)/split_count)
     for i, idxs in enumerate(split_array(base, window)):                    
         part = dataset.select(idxs)

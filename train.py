@@ -14,17 +14,11 @@ def init_tokenizer():
 
 
 def train_as_dataset(tokenizer, trainer, dataset, batch_size):
-    def batch_iterator(ds):
-        for i in range(0, len(ds), batch_size):
-            if i + batch_size > len(ds):
-                yield ds[i : len(ds)-1]["text"]
-            else:
-                print('ds: ', ds)
-                print('ds2: ', ds.select([0, 1, 2]))
-                yield ds[i : i + batch_size - 1]["text"]
-
-    print('len: ', len(dataset))
-    tokenizer.train_from_iterator(batch_iterator(dataset), trainer=trainer, length=len(dataset))
+    for i in range(0, len(dataset), batch_size):
+        batched_data = []
+        for v in dataset.select(range(i, i+batch_size)):
+            batched_data = v['text']
+        tokenizer.train_from_iterator(batched_data, trainer=trainer, length=len(dataset))    
     return tokenizer
 
     

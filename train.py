@@ -16,8 +16,12 @@ def init_tokenizer():
 def train_as_dataset(tokenizer, trainer, dataset, batch_size):
     for i in range(0, len(dataset), batch_size):
         batched_data = []
-        print('c: ', len(dataset), i+batch_size)
+        print('c: ', len(dataset), i, i+batch_size)
         print('a: ' ,dataset.select(range(0, 10)))
+        print('a1: ' ,dataset.select(range(0, 100)))
+        print('a2: ' ,dataset.select(range(0, 500)))        
+        print('a3: ' ,dataset.select(range(0, 800)))
+        print('a4: ' ,dataset.select(range(0, 1000)))
         for v in dataset.select(range(i, i+batch_size)):
             batched_data = v['text']
         tokenizer.train_from_iterator(batched_data, trainer=trainer, length=len(dataset))    

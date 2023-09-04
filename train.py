@@ -25,6 +25,16 @@ def train_as_dataset(tokenizer, trainer, dataset, batch_size):
 def split_array(arr, M):
     return [arr[i:i+M] for i in range(0, len(arr), M)]
 
+def train_with_split(tokenizer, trainer, dataset, batch_size, split_count=10):
+    base = range(len(dataset))    
+    window = int(len(dataset)/split_count)
+    for i, idxs in enumerate(split_array(base, window)):                    
+        part = dataset.select(idxs)
+        print(part)
+        tokenizer = train_as_dataset(tokenizer, trainer, part , batch_size)
+    return tokenizer
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -61,17 +71,17 @@ def main():
         dataset = datasets.load_dataset(dataset_id)
         dataset = dataset['train']
         print(dataset)
-        base = range(len(dataset))    
-        window = int(len(dataset)/10)
-        for i, idxs in enumerate(split_array(base, window)):                    
-            part = dataset.select(idxs)
-            print(part)
-            tokenizer = train_as_dataset(tokenizer, trainer, part , 20000)
-            save_file = f"./tmp_{dataset_id}_{i}.json"
-            tokenizer.save(save_file)
-            print(f'save... {save_file}')
+       
+        if 'wiki' in dataset_id:
+            tokenizer = train_with_split(tokenizer, trainer, dataset, batch_size=20000, split_count=100)
+        else:
+            tokenizer = train_as_dataset(tokenizer, trainer, dataset, batch_size=20000)
+        save_file = f"./tmp_{dataset_id}.json"
+        tokenizer.save(save_file)
+        print(f'save... {save_file}')
 
     tokenizer.save(args.save_file)
+    print(f'save... {args.save_file}')
 
 
 if __name__ == '__main__':

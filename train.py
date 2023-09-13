@@ -12,27 +12,31 @@ def init_tokenizer():
     tokenizer.decoder = decoders.BPEDecoder()   
     return tokenizer
 
-
-def train_as_dataset(tokenizer, trainer, dataset, batch_size):
-    for i in range(0, len(dataset), batch_size):
-        batched_data = []
-        for idx in range(i, i+batch_size):
-            batched_data.append(dataset.select([idx])['text'][0])
-        tokenizer.train_from_iterator(batched_data, trainer=trainer, length=len(dataset))    
+def train_aozora(tokenizer, trainer, dataset):
+    def ds_yielder():
+        for v in dataset["text"]:
+            yield v
+    tokenizer.train_from_iterator(ds_yielder(), trainer=trainer, length=len(dataset))
     return tokenizer
 
+def train(tokenizer, trainer, dataset):
+    def ds_yielder():
+        for v in dataset:
+            yield v["text"]
+    tokenizer.train_from_iterator(ds_yielder(), trainer=trainer, length=len(dataset))
+    return tokenizer
     
 def split_array(arr, M):
     return [arr[i:i+M] for i in range(0, len(arr), M)]
 
-def train_with_split(tokenizer, trainer, dataset, batch_size, split_count=10):
-    base = range(len(dataset))
-    window = int(len(dataset)/split_count)
-    for i, idxs in enumerate(split_array(base, window)):                    
-        part = dataset.select(idxs)
-        print(part)
-        tokenizer = train_as_dataset(tokenizer, trainer, part , batch_size)
-    return tokenizer
+# def train_with_split(tokenizer, trainer, dataset, batch_size, split_count=10):
+#     base = range(len(dataset))
+#     window = int(len(dataset)/split_count)
+#     for i, idxs in enumerate(split_array(base, window)):                    
+#         part = dataset.select(idxs)
+#         print(part)
+#         tokenizer = train_as_dataset(tokenizer, trainer, part , batch_size)
+#     return tokenizer
 
 
 def main():
@@ -66,17 +70,17 @@ def main():
         unk_token="<UNK>"
     )
 
-    
     for dataset_id in args.datasets: 
         dataset = datasets.load_dataset(dataset_id)
         ds = dataset['train']
         print('raw dataset: ', ds)
-       
-        if 'wiki' in dataset_id:
-            tokenizer = train_with_split(tokenizer, trainer, ds, batch_size=20000, split_count=100)
-        else:            
-            tokenizer = train_as_dataset(tokenizer, trainer, ds, batch_size=10000)
-        save_file = f"./tmp_{dataset_id}.json"
+        if "aozora" in dataset_id:
+            tokenizer = train_aozora(tokenizer, trainer, ds)
+        else:
+            tokenizer = train(tokenizer, trainer, ds)
+
+        save_id = dataset_id.split("/")[-1]
+        save_file = f"./tmp_{save_id}.json"
         tokenizer.save(save_file)
         print(f'save... {save_file}')
 

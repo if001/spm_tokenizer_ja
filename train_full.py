@@ -16,10 +16,12 @@ def init_tokenizer():
 def train(tokenizer, trainer, dataset_ids):
     def ds_yielder():
         for dataset_id in dataset_ids: 
-            dataset = datasets.load_dataset(dataset_id)
+            print('start...', dataset_id)
+            dataset = datasets.load_dataset(dataset_id)            
             ds = dataset['train']
+            print('ds', ds)
             if 'aozora' in dataset_id:
-                for v in dataset["text"]:
+                for v in ds["text"]:
                     yield v
             else:
                 for v in ds:

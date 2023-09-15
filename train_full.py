@@ -13,9 +13,9 @@ def init_tokenizer():
     return tokenizer
 
 
-def train(tokenizer, trainer, datasets):
+def train(tokenizer, trainer, dataset_ids):
     def ds_yielder():
-        for dataset_id in datasets: 
+        for dataset_id in dataset_ids: 
             dataset = datasets.load_dataset(dataset_id)
             ds = dataset['train']
             if 'aozora' in dataset_id:

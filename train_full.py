@@ -20,6 +20,7 @@ def train(tokenizer, trainer, dataset_ids):
             dataset = datasets.load_dataset(dataset_id)            
             ds = dataset['train']
             print('ds', ds)
+            ds = ds.select(range(0, 100))
             if 'aozora' in dataset_id:
                 for v in ds["text"]:
                     yield v
